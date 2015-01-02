@@ -1,6 +1,6 @@
 <?php
 
-namespace Phalcon\Mvc\View\Engine;
+namespace PhalconRest\Mvc\View\Engine;
 
 class Json extends \Phalcon\Mvc\View\Engine\Php
 {

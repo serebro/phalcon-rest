@@ -1,8 +1,8 @@
 <?php
 
-namespace Phalcon\Mvc;
+namespace PhalconRest\Mvc;
 
-use Phalcon\Mvc\View\Engine\Json as JsonEngine;
+use PhalconRest\Mvc\View\Engine\Json as JsonEngine;
 use Phalcon\Events\ManagerInterface;
 
 class RestView extends \Phalcon\Mvc\View
