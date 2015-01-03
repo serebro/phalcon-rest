@@ -17,15 +17,17 @@ class Rest
     /** @var string */
     protected $prefix = '/api';
 
+    /** @var string */
+    protected $id_filter = 'int';
+
 
     /**
-     * @param string $id_regexp
      * @return $this
      */
-    public function init($id_regexp = '')
+    public function init()
     {
-        if ($id_regexp) {
-            $id_regexp = ':' . $id_regexp;
+        if ($this->id_filter) {
+            $this->id_filter = ':' . $this->id_filter;
         }
 
         if (empty($this->apiGroup)) {
@@ -37,13 +39,13 @@ class Rest
         $this->apiGroup->addGet    ('/{controller}', ['action' => 'index', 'namespace' => $this->namespace]);
         $this->apiGroup->addPost   ('/{controller}', ['action' => 'post', 'namespace' => $this->namespace]);
         $this->apiGroup->add       ('/{controller}/{action}', ['namespace' => $this->namespace]);
-        $this->apiGroup->addOptions('/{controller}/{id' . $id_regexp . '}', ['action' => 'options', 'namespace' => $this->namespace]);
-        $this->apiGroup->addGet    ('/{controller}/{id' . $id_regexp . '}', ['action' => 'get', 'namespace' => $this->namespace]);
-        $this->apiGroup->addPut    ('/{controller}/{id' . $id_regexp . '}', ['action' => 'put', 'namespace' => $this->namespace]);
-        $this->apiGroup->addPatch  ('/{controller}/{id' . $id_regexp . '}', ['action' => 'patch', 'namespace' => $this->namespace]);
-        $this->apiGroup->addHead   ('/{controller}/{id' . $id_regexp . '}', ['action' => 'head', 'namespace' => $this->namespace]);
-        $this->apiGroup->addDelete ('/{controller}/{id' . $id_regexp . '}', ['action' => 'delete', 'namespace' => $this->namespace]);
-        $this->apiGroup->add       ('/{controller}/{id' . $id_regexp . '}/{action}', ['namespace' => $this->namespace]);
+        $this->apiGroup->addOptions('/{controller}/{id' . $this->id_filter . '}', ['action' => 'options', 'namespace' => $this->namespace]);
+        $this->apiGroup->addGet    ('/{controller}/{id' . $this->id_filter . '}', ['action' => 'get', 'namespace' => $this->namespace]);
+        $this->apiGroup->addPut    ('/{controller}/{id' . $this->id_filter . '}', ['action' => 'put', 'namespace' => $this->namespace]);
+        $this->apiGroup->addPatch  ('/{controller}/{id' . $this->id_filter . '}', ['action' => 'patch', 'namespace' => $this->namespace]);
+        $this->apiGroup->addHead   ('/{controller}/{id' . $this->id_filter . '}', ['action' => 'head', 'namespace' => $this->namespace]);
+        $this->apiGroup->addDelete ('/{controller}/{id' . $this->id_filter . '}', ['action' => 'delete', 'namespace' => $this->namespace]);
+        $this->apiGroup->add       ('/{controller}/{id' . $this->id_filter . '}/{action}', ['namespace' => $this->namespace]);
 
         return $this;
     }
@@ -109,6 +111,24 @@ class Rest
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdFilter()
+    {
+        return $this->id_filter;
+    }
+
+    /**
+     * @param string $idFilter
+     * @return $this
+     */
+    public function setIdFilter($idFilter)
+    {
+        $this->id_filter = $idFilter;
         return $this;
     }
 }

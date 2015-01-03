@@ -36,6 +36,7 @@ $di->set('router', function () {
 	$rest
 		->setNamespace('\Controllers\Api')
 		->setPrefix('/api')
+		->setIdFilter('[0-9]+')
 		->init()
 		->mountTo($router);
 
