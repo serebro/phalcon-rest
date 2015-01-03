@@ -9,7 +9,7 @@ $di->set('jsonEngine', function() {
 	$engine = new \PhalconRest\Mvc\View\Engine\Json();
 	$engine
 		->setJsonEncodeOptions(JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT)
-		->setJsonpContentType('application/jsonp')
+		->setJsonpContentType('application/javascript')
 		->setJsonContentType('application/json')
 		->setCallbackParamName('json_callback')
 		
