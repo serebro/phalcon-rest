@@ -4,8 +4,15 @@ namespace PhalconRest\Mvc;
 
 use Phalcon\Mvc\Controller;
 
+/**
+ * Class RestController
+ * @package PhalconRest\Mvc
+ */
 abstract class RestController extends Controller
 {
+
+    /** @var \PhalconRest\Mvc\RestView */
+    public $view;
 
     protected $fields = [];
 
@@ -49,6 +56,7 @@ abstract class RestController extends Controller
         /** @var \Phalcon\Http\Response $response */
         $response = $this->getDI()->get('response');
         $response->setHeader('X-Rate-Limit-Limit', $limit);
+
         return $this;
     }
 
@@ -62,6 +70,7 @@ abstract class RestController extends Controller
         /** @var \Phalcon\Http\Response $response */
         $response = $this->getDI()->get('response');
         $response->setHeader('X-Rate-Limit-Remaining', $limit);
+
         return $this;
     }
 
@@ -75,6 +84,7 @@ abstract class RestController extends Controller
         /** @var \Phalcon\Http\Response $response */
         $response = $this->getDI()->get('response');
         $response->setHeader('X-Rate-Limit-Reset', $limit);
+
         return $this;
     }
 }
