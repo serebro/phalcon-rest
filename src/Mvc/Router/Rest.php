@@ -1,6 +1,6 @@
 <?php
 
-namespace PhalconRest\Mvs\Router;
+namespace PhalconRest\Mvc\Router;
 
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router;
