@@ -27,6 +27,22 @@ $di->set('view', function(){
 });
 ```
 
+Router
+```php
+$di->set('router', function () {
+	$router = include(APP_PATH . '/config/routes.php');
+
+	$rest = new \PhalconRest\Mvc\Router\Rest();
+	$rest
+		->setNamespace('\Controllers\Api')
+		->setPrefix('/api')
+		->init()
+		->mountTo($router);
+
+	return $router;
+});
+```
+
 ### Controller
 
 ExampleController.php
