@@ -37,19 +37,14 @@ Rest View
 ExampleController.php
 ```php
 class OrdersController extends Controller {
+	public function indexAction() {
+		$this->view->orders = Order::findAll();
+	}
+
 	public function getAction() {
 		$order_id = $this->dispatcher->getParam('id');
-
-		if (!$order_id) {
-			return $this->response->error('not_valid');
-		}
-
-		if (!$order = Order::findOne($order_id)) {
-			return $this->response->error('not_found');
-		}
-
-		$this->view->order = $order;
-		$this->view->pick('order/item');
+		$this->view->order = Order::findOne($order_id);
+		$this->view->pick('orders/item');
 	}
 }
 
@@ -57,9 +52,9 @@ class OrdersController extends Controller {
 
 ### Json Response Views
 
-/responses/orders/index.json.php
 ```php
 <?php
+/* /responses/orders/index.json.php */
 $items = [];
 foreach ($orders as $order) {
 	$items[] = $this->partial('orders/_item', ['order' => $order]);
@@ -74,15 +69,15 @@ return [
 ];
 ```
 
-/responses/orders/item.json.php
 ```php
 <?php
+/* /responses/orders/item.json.php */
 return $this->partial('order/_item', ['order' => $order]);
 ```
 
-/responses/orders/_item.json.php
 ```php
 <?php
+/* /responses/orders/_item.json.php */
 return [
 	'id' => $order->id,
 	'createdAt' => $order->created_at,
