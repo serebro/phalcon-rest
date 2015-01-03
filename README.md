@@ -5,31 +5,26 @@ Phalcon Rest
 
 View Engine
 ```php
-'jsonEngine' => [
-	'className' => '\PhalconRest\Mvc\View\Engine\Json',
-	'calls' => [
-		['method' => 'setJsonEncodeOptions', 'arguments' => [
-			['type' => 'parameter', 'value' => JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT],
-		]],
-	],
-],
+$di->set('jsonEngine', function() {
+	$engine = new \PhalconRest\Mvc\View\Engine\Json();
+	$engine
+		->setJsonEncodeOptions(JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT)
+		->setJsonpContentType('application/jsonp')
+		->setJsonContentType('application/json')
+		->setCallbackParamName('json_callback')
+		
+	return $engine; 
+});
 ```
 
 Rest View
 ```php
-'view'   => [
-	'className' => '\PhalconRest\Mvc\RestView',
-	'calls' => [
-		['method' => 'setViewsDir', 'arguments' => [
-			['type' => 'parameter', 'value' => APP_PATH . '/responses/'],
-		]],
-		['method' => 'registerEngines', 'arguments' => [
-			['type' => 'parameter', 'value' => [
-				'.json.php' => 'jsonEngine',
-			]],
-		]],
-	],
-],
+$di->set('view', function(){
+	$restView = new \PhalconRest\Mvc\RestView();
+	$restView->setViewsDir(APP_PATH . '/responses/');
+	$restView->registerEngines(['.json.php' => 'jsonEngine']);
+	return $restView; 
+});
 ```
 
 ### Controller
@@ -85,4 +80,3 @@ return [
 	'sum' => $order->sum,
 ];
 ```
-
