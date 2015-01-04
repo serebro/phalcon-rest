@@ -22,7 +22,7 @@ Rest View
 $di->set('view', function(){
 	$restView = new \PhalconRest\Mvc\RestView();
 	$restView->setViewsDir(APP_PATH . '/responses/');
-	$restView->registerEngines(['.json.php' => 'jsonEngine']);
+	$restView->registerEngines(['.php' => 'jsonEngine']);
 	return $restView; 
 });
 ```
@@ -50,6 +50,7 @@ ExampleController.php
 ```php
 class OrdersController extends \Phalcon\Mvc\Controller {
 	public function indexAction() {
+		$this->view->total = Order::count();
 		$this->view->orders = Order::findAll();
 	}
 
@@ -66,7 +67,7 @@ class OrdersController extends \Phalcon\Mvc\Controller {
 
 ```php
 <?php
-/* /responses/orders/index.json.php */
+/* /responses/orders/index.php */
 $items = [];
 foreach ($orders as $order) {
 	$items[] = $this->partial('orders/_item', ['order' => $order]);
@@ -75,7 +76,7 @@ foreach ($orders as $order) {
 return [
 	'meta' => (object)[
 		'number' => count($orders),
-		'total' => count($orders),
+		'total' => $total,
 	],
 	'results' => $items
 ];
@@ -83,13 +84,13 @@ return [
 
 ```php
 <?php
-/* /responses/orders/item.json.php */
+/* /responses/orders/item.php */
 return $this->partial('order/_item', ['order' => $order]);
 ```
 
 ```php
 <?php
-/* /responses/orders/_item.json.php */
+/* /responses/orders/_item.php */
 return [
 	'id' => $order->id,
 	'createdAt' => $order->created_at,
