@@ -48,7 +48,7 @@ $di->set('router', function () {
 
 ExampleController.php
 ```php
-class OrdersController extends Controller {
+class OrdersController extends \Phalcon\Mvc\Controller {
 	public function indexAction() {
 		$this->view->orders = Order::findAll();
 	}
