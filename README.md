@@ -75,7 +75,7 @@ foreach ($orders as $order) {
 
 return [
 	'meta' => (object)[
-		'number' => count($orders),
+		'number' => count($items),
 		'total' => $total,
 	],
 	'results' => $items
