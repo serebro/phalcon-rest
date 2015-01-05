@@ -8,7 +8,7 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
 {
 
     /** @var int */
-	protected $json_encode_options;
+    protected $json_encode_options;
 
     protected $callback_param_name = 'callback';
 
@@ -23,15 +23,16 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
      * @param bool   $mustClean
      * @throws Exception
      */
-	public function render($path, $params, $mustClean = null)
-	{
-		if (is_array($params)) {
-			extract($params);
-		}
+    public function render($path, $params, $mustClean = null)
+    {
+        if (is_array($params)) {
+            extract($params);
+        }
 
-		$data = require $path;
-		if ($mustClean === false) {
+        $data = require $path;
+        if ($mustClean === false) {
             $this->_view->setData($data);
+
             return;
         }
 
@@ -49,30 +50,31 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
         if ($request->has($this->callback_param_name)) {
             $callback = $request->get($this->callback_param_name);
             $content = "$callback($content);";
-            $response->setHeader('Content-Type', $this->jsonp_header);
+            $response->setHeader('Content-Type', $this->jsonp_content_type);
         } else {
-            $response->setHeader('Content-Type', $this->json_header);
+            $response->setHeader('Content-Type', $this->json_encode_options);
         }
         $this->_view->setContent($content);
-	}
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getJsonEncodeOptions()
-	{
-		return $this->json_encode_options;
-	}
+    /**
+     * @return mixed
+     */
+    public function getJsonEncodeOptions()
+    {
+        return $this->json_encode_options;
+    }
 
-	/**
-	 * @param mixed $json_encode_options
-	 * @return $this
-	 */
-	public function setJsonEncodeOptions($json_encode_options)
-	{
-		$this->json_encode_options = $json_encode_options;
-		return $this;
-	}
+    /**
+     * @param mixed $json_encode_options
+     * @return $this
+     */
+    public function setJsonEncodeOptions($json_encode_options)
+    {
+        $this->json_encode_options = $json_encode_options;
+
+        return $this;
+    }
 
     /**
      * @return string
@@ -89,6 +91,7 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
     public function setJsonContentType($json_content_type)
     {
         $this->json_content_type = $json_content_type;
+
         return $this;
     }
 
@@ -107,6 +110,7 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
     public function setJsonpContentType($jsonp_content_type)
     {
         $this->jsonp_content_type = $jsonp_content_type;
+
         return $this;
     }
 
@@ -125,6 +129,7 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
     public function setCallbackParamName($callback_param_name)
     {
         $this->callback_param_name = $callback_param_name;
+
         return $this;
     }
 }
