@@ -52,8 +52,10 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
             $content = "$callback($content);";
             $response->setHeader('Content-Type', $this->jsonp_content_type);
         } else {
-            $response->setHeader('Content-Type', $this->json_encode_options);
+            $response->setHeader('Content-Type', $this->json_content_type);
         }
+
+
         $this->_view->setContent($content);
     }
 
