@@ -17,6 +17,13 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
     protected $jsonp_content_type = 'application/javascript';
 
 
+    public function __construct($view, $dependencyInjector = null)
+    {
+        $this->_view = $view;
+        $this->setDI($dependencyInjector);
+        $this->_view->envelope = new \PhalconRest\Http\Envelope\Json();
+    }
+
     /**
      * @param string $path
      * @param array  $params
@@ -34,6 +41,10 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
             $this->_view->setData($data);
 
             return;
+        }
+
+        if (!$this->_view->envelope->isDisabled()) {
+            $data = $this->_view->envelope->setData($data)->make();
         }
 
         $content = json_encode($data, $this->json_encode_options);
@@ -54,7 +65,6 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
         } else {
             $response->setHeader('Content-Type', $this->json_content_type);
         }
-
 
         $this->_view->setContent($content);
     }

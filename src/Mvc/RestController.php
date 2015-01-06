@@ -22,69 +22,24 @@ abstract class RestController extends Controller
 
     protected $offset;
 
+    protected $method_key = '_method';
+
 
     protected function initialize()
     {
-        /** @var \Phalcon\Http\RequestInterface $request */
-        $request = $this->getDI()->get('request');
-
-        if ($request->has('_method')) {
-            $method = $request->get('_method');
+        if ($this->request->has($this->method_key)) {
+            $method = $this->request->get($this->method_key);
         } else {
-            $method = $request->getHeader('X-HTTP-Method-Override');
+            $method = $this->request->getHeader('X-HTTP-Method-Override');
         }
 
         if (!empty($method)) {
-            /** @var \Phalcon\DispatcherInterface $dispatcher */
-            $dispatcher = $this->getDI()->get('dispatcher');
-            $dispatcher->setActionName($method);
+            $this->dispatcher->setActionName($method);
         }
 
-        $this->fields = explode(',', $request->get('fields'));
-        $this->sort = $request->get('sort');
-        $this->limit = $request->get('limit', 'int');
-        $this->offset = $request->get('offset', 'int');
-    }
-
-    /**
-     * The number of allowed requests in the current period
-     * @param int $limit
-     * @return $this
-     */
-    protected function setRateLimit($limit)
-    {
-        /** @var \Phalcon\Http\Response $response */
-        $response = $this->getDI()->get('response');
-        $response->setHeader('X-Rate-Limit-Limit', $limit);
-
-        return $this;
-    }
-
-    /**
-     * The number of remaining requests in the current period
-     * @param int $limit
-     * @return $this
-     */
-    protected function setRateLimitRemaining($limit)
-    {
-        /** @var \Phalcon\Http\Response $response */
-        $response = $this->getDI()->get('response');
-        $response->setHeader('X-Rate-Limit-Remaining', $limit);
-
-        return $this;
-    }
-
-    /**
-     * The number of seconds left in the current period
-     * @param int $limit
-     * @return $this
-     */
-    protected function setRateLimitReset($limit)
-    {
-        /** @var \Phalcon\Http\Response $response */
-        $response = $this->getDI()->get('response');
-        $response->setHeader('X-Rate-Limit-Reset', $limit);
-
-        return $this;
+        $this->fields = explode(',', $this->request->get('fields'));
+        $this->sort = $this->request->get('sort');
+        $this->limit = $this->request->get('limit', 'int', null);
+        $this->offset = $this->request->get('offset', 'int', null);
     }
 }

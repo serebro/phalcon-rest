@@ -10,7 +10,10 @@ use PhalconRest\Mvc\View\Engine\Json as JsonEngine;
 class RestView extends View
 {
 
-    protected $_data;
+    /** @var  \PhalconRest\Http\Envelope */
+    public $envelope;
+
+    protected $data;
 
 
     public function partial($partialPath, array $params = null)
@@ -158,7 +161,7 @@ class RestView extends View
 
                 $cachedView = $cache->start($key, $lifetime);
                 if ($cachedView !== null) {
-                    $this->_data = $cachedView;
+                    $this->data = $cachedView;
 
                     return null;
                 }
@@ -208,7 +211,7 @@ class RestView extends View
      */
     public function getData()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -217,33 +220,9 @@ class RestView extends View
      */
     public function setData($data)
     {
-        $this->_data = $data;
+        $this->data = $data;
 
         return $this;
     }
 
-    public function statusCodeOK()
-    {
-        $this->response->setStatusCode(200, 'OK');
-    }
-
-    public function statusCodeCreated()
-    {
-        $this->response->setStatusCode(201, 'Created');
-    }
-
-    public function statusCodeAccepted()
-    {
-        $this->response->setStatusCode(202, 'Accepted');
-    }
-
-    public function statusCodeNoContent()
-    {
-        $this->response->setStatusCode(204, 'No Content');
-    }
-
-    public function statusCodePartialContent()
-    {
-        $this->response->setStatusCode(206, 'Partial Content');
-    }
 }
