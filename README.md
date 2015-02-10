@@ -11,7 +11,7 @@ $di->set('jsonEngine', function() {
 		->setJsonEncodeOptions(JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT)
 		->setJsonpContentType('application/javascript')
 		->setJsonContentType('application/json')
-		->setCallbackParamName('json_callback')
+		->setCallbackParamName('json_callback');
 		
 	return $engine; 
 });
