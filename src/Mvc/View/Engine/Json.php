@@ -61,11 +61,12 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
         if ($request->has($this->callback_param_name)) {
             $callback = $request->get($this->callback_param_name);
             $content = "$callback($content);";
-            $response->setHeader('Content-Type', $this->jsonp_content_type);
+			$content_type = $this->jsonp_content_type;
         } else {
-            $response->setHeader('Content-Type', $this->json_content_type);
+			$content_type = $this->json_content_type;
         }
 
+		$response->setHeader('Content-Type', $content_type);
         $this->_view->setContent($content);
     }
 

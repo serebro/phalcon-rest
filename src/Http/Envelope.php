@@ -23,7 +23,7 @@ abstract class Envelope extends Component
     protected $data_key = 'data';
 
     /** @var bool */
-    protected $disabled = false;
+    protected $disabled = true;
 
 
     /**
