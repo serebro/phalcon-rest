@@ -5,8 +5,8 @@ Phalcon Rest
 
 View Engine
 ```php
-$di->set('jsonEngine', function() {
-	$engine = new \PhalconRest\Mvc\View\Engine\Json();
+$di->set('jsonEngine', function($view, $di) {
+	$engine = new \PhalconRest\Mvc\View\Engine\Json($view, $di);
 	$engine
 		->setJsonEncodeOptions(JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT)
 		->setJsonpContentType('application/javascript')
@@ -51,12 +51,12 @@ ExampleController.php
 class OrdersController extends \Phalcon\Mvc\Controller {
 	public function indexAction() {
 		$this->view->total = Order::count();
-		$this->view->orders = Order::findAll();
+		$this->view->orders = Order::find();
 	}
 
 	public function getAction() {
 		$order_id = $this->dispatcher->getParam('id');
-		$this->view->order = Order::findOne($order_id);
+		$this->view->order = Order::findFirst($order_id);
 		$this->view->pick('orders/item');
 	}
 }
