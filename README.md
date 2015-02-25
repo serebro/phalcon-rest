@@ -5,8 +5,8 @@ Phalcon Rest
 
 View Engine
 ```php
-$di->set('jsonEngine', function() {
-	$engine = new \PhalconRest\Mvc\View\Engine\Json();
+$di->set('jsonEngine', function($view, $di) {
+	$engine = new \PhalconRest\Mvc\View\Engine\Json($view, $di);
 	$engine
 		->setJsonEncodeOptions(JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT)
 		->setJsonpContentType('application/javascript')
