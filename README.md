@@ -51,12 +51,12 @@ ExampleController.php
 class OrdersController extends \Phalcon\Mvc\Controller {
 	public function indexAction() {
 		$this->view->total = Order::count();
-		$this->view->orders = Order::findAll();
+		$this->view->orders = Order::find();
 	}
 
 	public function getAction() {
 		$order_id = $this->dispatcher->getParam('id');
-		$this->view->order = Order::findOne($order_id);
+		$this->view->order = Order::findFirst($order_id);
 		$this->view->pick('orders/item');
 	}
 }
