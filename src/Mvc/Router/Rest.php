@@ -18,7 +18,7 @@ class Rest
     protected $prefix = '/api';
 
     /** @var string */
-    protected $id_filter = 'int';
+    protected $id_filter = '[0-9]+';
 
 
     /**
