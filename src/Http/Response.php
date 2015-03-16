@@ -75,75 +75,106 @@ class Response extends PhalconResponse
     const NETWORK_AUTHENTICATION_REQUIRED_STATUS_CODE = 511;
 
     public static $status = [
-        100 => "CONTINUE", // RFC7231, SECTION 6.2.1
-        101 => "SWITCHING PROTOCOLS", // RFC7231, SECTION 6.2.2
-        102 => "PROCESSING", // RFC2518
+        100 => "Continue", // RFC7231, SECTION 6.2.1
+        101 => "Switching Protocols", // RFC7231, SECTION 6.2.2
+        102 => "Processing", // RFC2518
         200 => "OK", // RFC7231, SECTION 6.3.1
-        201 => "CREATED", // RFC7231, SECTION 6.3.2
-        202 => "ACCEPTED", // RFC7231, SECTION 6.3.3
-        203 => "NON-AUTHORITATIVE INFORMATION", // RFC7231, SECTION 6.3.4
-        204 => "NO CONTENT", // RFC7231, SECTION 6.3.5
-        205 => "RESET CONTENT", // RFC7231, SECTION 6.3.6
-        206 => "PARTIAL CONTENT", // RFC7233, SECTION 4.1
-        207 => "MULTI-STATUS", // RFC4918
-        208 => "ALREADY REPORTED", // RFC5842
-        226 => "IM USED", // RFC3229
-        300 => "MULTIPLE CHOICES", // RFC7231, SECTION 6.4.1
-        301 => "MOVED PERMANENTLY", // RFC7231, SECTION 6.4.2
-        302 => "FOUND", // RFC7231, SECTION 6.4.3
-        303 => "SEE OTHER", // RFC7231, SECTION 6.4.4
-        304 => "NOT MODIFIED", // RFC7232, SECTION 4.1
-        305 => "USE PROXY", // RFC7231, SECTION 6.4.5
-        306 => "(UNUSED)", // RFC7231, SECTION 6.4.6
-        307 => "TEMPORARY REDIRECT", // RFC7231, SECTION 6.4.7
-        308 => "PERMANENT REDIRECT", // RFC-IETF-HTTPBIS-RFC7238BIS-03
-        400 => "BAD REQUEST", // RFC7231, SECTION 6.5.1
-        401 => "UNAUTHORIZED", // RFC7235, SECTION 3.1
-        402 => "PAYMENT REQUIRED", // RFC7231, SECTION 6.5.2
-        403 => "FORBIDDEN", // RFC7231, SECTION 6.5.3
-        404 => "NOT FOUND", // RFC7231, SECTION 6.5.4
-        405 => "METHOD NOT ALLOWED", // RFC7231, SECTION 6.5.5
-        406 => "NOT ACCEPTABLE", // RFC7231, SECTION 6.5.6
-        407 => "PROXY AUTHENTICATION REQUIRED", // RFC7235, SECTION 3.2
-        408 => "REQUEST TIMEOUT", // RFC7231, SECTION 6.5.7
-        409 => "CONFLICT", // RFC7231, SECTION 6.5.8
-        410 => "GONE", // RFC7231, SECTION 6.5.9
-        411 => "LENGTH REQUIRED", // RFC7231, SECTION 6.5.10
-        412 => "PRECONDITION FAILED", // RFC7232, SECTION 4.2
-        413 => "PAYLOAD TOO LARGE", // RFC7231, SECTION 6.5.11
-        414 => "URI TOO LONG", // RFC7231, SECTION 6.5.12
-        415 => "UNSUPPORTED MEDIA TYPE", // RFC7231, SECTION 6.5.13
-        416 => "RANGE NOT SATISFIABLE", // RFC7233, SECTION 4.4
-        417 => "EXPECTATION FAILED", // RFC7231, SECTION 6.5.14
-        421 => "MISDIRECTED REQUEST", // RFC-IETF-HTTPBIS-HTTP2-17, SECTION 9.1.2
-        422 => "UNPROCESSABLE ENTITY", // RFC4918
-        423 => "LOCKED", // RFC4918
-        424 => "FAILED DEPENDENCY", // RFC4918
-        426 => "UPGRADE REQUIRED", // RFC7231, SECTION 6.5.15
-        428 => "PRECONDITION REQUIRED", // RFC6585
-        429 => "TOO MANY REQUESTS", // RFC6585
-        431 => "REQUEST HEADER FIELDS TOO LARGE", // RFC6585
-        500 => "INTERNAL SERVER ERROR", // RFC7231, SECTION 6.6.1
-        501 => "NOT IMPLEMENTED", // RFC7231, SECTION 6.6.2
-        502 => "BAD GATEWAY", // RFC7231, SECTION 6.6.3
-        503 => "SERVICE UNAVAILABLE", // RFC7231, SECTION 6.6.4
-        504 => "GATEWAY TIMEOUT", // RFC7231, SECTION 6.6.5
-        505 => "HTTP VERSION NOT SUPPORTED", // RFC7231, SECTION 6.6.6
-        506 => "VARIANT ALSO NEGOTIATES", // RFC2295
-        507 => "INSUFFICIENT STORAGE", // RFC4918
-        508 => "LOOP DETECTED", // RFC5842
-        510 => "NOT EXTENDED", // RFC2774
-        511 => "NETWORK AUTHENTICATION REQUIRED", // RFC6585    
+        201 => "Created", // RFC7231, SECTION 6.3.2
+        202 => "Accepted", // RFC7231, SECTION 6.3.3
+        203 => "Non-Authoritative Information", // RFC7231, SECTION 6.3.4
+        204 => "No Content", // RFC7231, SECTION 6.3.5
+        205 => "Reset Content", // RFC7231, SECTION 6.3.6
+        206 => "Partial Content", // RFC7233, SECTION 4.1
+        207 => "Multi-Status", // RFC4918
+        208 => "Already Reported", // RFC5842
+        226 => "IM Used", // RFC3229
+        300 => "Multiple Choices", // RFC7231, SECTION 6.4.1
+        301 => "Moved Permanently", // RFC7231, SECTION 6.4.2
+        302 => "Found", // RFC7231, SECTION 6.4.3
+        303 => "See Other", // RFC7231, SECTION 6.4.4
+        304 => "Not Modified", // RFC7232, SECTION 4.1
+        305 => "Use Proxy", // RFC7231, SECTION 6.4.5
+        306 => "(Unused)", // RFC7231, SECTION 6.4.6
+        307 => "Temporary Redirect", // RFC7231, SECTION 6.4.7
+        308 => "Permanent Redirect", // RFC-IETF-HTTPBIS-RFC7238BIS-03
+        400 => "Bad Request", // RFC7231, SECTION 6.5.1
+        401 => "Unauthorized", // RFC7235, SECTION 3.1
+        402 => "Payment Required", // RFC7231, SECTION 6.5.2
+        403 => "Forbidden", // RFC7231, SECTION 6.5.3
+        404 => "Not Found", // RFC7231, SECTION 6.5.4
+        405 => "Method Not Allowed", // RFC7231, SECTION 6.5.5
+        406 => "Not Acceptable", // RFC7231, SECTION 6.5.6
+        407 => "Proxy Authentication Required", // RFC7235, SECTION 3.2
+        408 => "Request Timeout", // RFC7231, SECTION 6.5.7
+        409 => "Conflict", // RFC7231, SECTION 6.5.8
+        410 => "Gone", // RFC7231, SECTION 6.5.9
+        411 => "Length Required", // RFC7231, SECTION 6.5.10
+        412 => "Precondition Failed", // RFC7232, SECTION 4.2
+        413 => "Payload Too Large", // RFC7231, SECTION 6.5.11
+        414 => "URI Too Long", // RFC7231, SECTION 6.5.12
+        415 => "Unsupported Media Type", // RFC7231, SECTION 6.5.13
+        416 => "Range Not Satisfiable", // RFC7233, SECTION 4.4
+        417 => "Expectation Failed", // RFC7231, SECTION 6.5.14
+        421 => "Misdirected Request", // RFC-IETF-HTTPBIS-HTTP2-17, SECTION 9.1.2
+        422 => "Unprocessable Entity", // RFC4918
+        423 => "Locked", // RFC4918
+        424 => "Failed Dependency", // RFC4918
+        426 => "Upgrade Required", // RFC7231, SECTION 6.5.15
+        428 => "Precondition Required", // RFC6585
+        429 => "Too Many Requests", // RFC6585
+        431 => "Request Header Fields Too Large", // RFC6585
+        500 => "Internal Server Error", // RFC7231, SECTION 6.6.1
+        501 => "Not Implemented", // RFC7231, SECTION 6.6.2
+        502 => "Bad Gateway", // RFC7231, SECTION 6.6.3
+        503 => "Service Unavailable", // RFC7231, SECTION 6.6.4
+        504 => "Gateway Timeout", // RFC7231, SECTION 6.6.5
+        505 => "HTTP Version Not Supported", // RFC7231, SECTION 6.6.6
+        506 => "Variant Also Negotiates", // RFC2295
+        507 => "Insufficient Storage", // RFC4918
+        508 => "Loop Detected", // RFC5842
+        510 => "Not Extended", // RFC2774
+        511 => "Network Authentication Required", // RFC6585    
     ];
-    
+
+    /**
+     * Sets the HTTP response code
+     *
+     * <code>
+     * 	$response->setStatusCode(404, "Not Found");
+     *  // or
+     *  $response->setStatusCode(404);
+     * </code>
+     *
+     * @param int $code
+     * @param string $message
+     * @return \Phalcon\Http\ResponseInterface
+     */
     public function setStatusCode($code, $message = null)
     {
-        if(is_null($message) && isset(self::$status[$code])) {
+        if (is_null($message) && isset(self::$status[$code])) {
             $message = self::$status[$code];
         }
-        parent::setStatusCode($code, $message);
+        return parent::setStatusCode($code, $message);
     }
 
+    /**
+     * Get message for code
+     * <code>
+     * $response->getStatusCodeMessage(404);
+     * </code>
+     * @param int $code
+     * @return string
+     */
+    public function getStatusCodeMessage($code)
+    {
+        return isset(self::$status[$code]) ? self::$status[$code] : null;
+    }
+
+    /**
+     * Prints out HTTP response to the client
+     * And if isset request 'suppress_response_codes', then set status code 200
+     * @return \Phalcon\Http\ResponseInterface
+     */
     public function send()
     {
         $request = $this->getDI()->get('request');
