@@ -1,5 +1,6 @@
 Phalcon Rest
 ---
+[![Phalconist](http://phalconist.com/serebro/phalcon-rest/default.svg)](http://phalconist.com/serebro/phalcon-rest)
 
 ### Configuration
 
