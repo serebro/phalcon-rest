@@ -6,50 +6,43 @@ Phalcon Rest
 
 View Engine
 ```php
-$di->set('jsonEngine', function($view, $di) {
-	$engine = new \PhalconRest\Mvc\View\Engine\Json($view, $di);
-	$engine
-		->setJsonEncodeOptions(JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT)
-		->setJsonpContentType('application/javascript')
-		->setJsonContentType('application/json')
-		->setCallbackParamName('json_callback');
-		
-	return $engine; 
+ 
+new \PhalconRest\ServiceProvider($di);
+
+$di->set('view', function() use($di) {
+    /** @var \PhalconRest\Mvc\RestView $restView */
+    $restView = $di->get('restView');
+    $restView->setBasePath('/app/responses/');
+    return $restView;
 });
 ```
 
-Rest View
+Router (config/routes.php)
 ```php
-$di->set('view', function(){
-	$restView = new \PhalconRest\Mvc\RestView();
-	$restView->setViewsDir(APP_PATH . '/responses/');
-	$restView->registerEngines(['.php' => 'jsonEngine']);
-	return $restView; 
-});
-```
+$router = new \Phalcon\Mvc\Router(false);
+$router->removeExtraSlashes(true);
+$router->setDefaultNamespace('Controllers');
 
-Router
-```php
-$di->set('router', function () {
-	$router = include APP_PATH . '/config/routes.php';
+$rest = new \PhalconRest\Mvc\Router\RestGroup();
+$rest->setNamespace('Controllers\Api')
+    ->setPrefix('api/')
+    ->setIdFilter('[0-9]+')
+    ->initDefault();
 
-	$rest = new \PhalconRest\Mvc\Router\Rest();
-	$rest
-		->setNamespace('\Controllers\Api')
-		->setPrefix('/api')
-		->setIdFilter('[0-9]+')
-		->init()
-		->mountTo($router);
+$router->mount($rest);
 
-	return $router;
-});
+return $router;
 ```
 
 ### Controller
 
 ExampleController.php
 ```php
-class OrdersController extends \Phalcon\Mvc\Controller {
+<?php
+
+namespace Controllers;
+
+class OrdersController extends \PhalconRest\Mvc\ControllerBase {
 	public function indexAction() {
 		$this->view->total = Order::count();
 		$this->view->orders = Order::find();
@@ -64,38 +57,51 @@ class OrdersController extends \Phalcon\Mvc\Controller {
 
 ```
 
-### Json Response Views
+### Response Views
 
 ```php
 <?php
-/* /responses/orders/index.php */
-$items = [];
-foreach ($orders as $order) {
-	$items[] = $this->partial('orders/_item', ['order' => $order]);
-}
 
-return [
-	'meta' => (object)[
-		'number' => count($items),
-		'total' => $total,
-	],
-	'results' => $items
-];
+/* /app/responses/orders/index.php */
+
+return function ($params) {
+
+	$items = [];
+	foreach ($params['orders'] as $order) {
+		$items[] = $this->partial('orders/_item', ['order' => $order]);
+	}
+	
+	return [
+		'results' => $items
+	];
+
+};
 ```
 
 ```php
 <?php
-/* /responses/orders/item.php */
-return $this->partial('order/_item', ['order' => $order]);
+
+/* /app/responses/orders/item.php */
+
+return function ($params) {
+
+	return $this->partial('order/_item', ['order' => $order]);
+	
+};
 ```
 
 ```php
 <?php
-/* /responses/orders/_item.php */
-return [
-	'id' => $order->id,
-	'createdAt' => $order->created_at,
-	'userId' => $order->user_id,
-	'sum' => $order->sum,
-];
+/* /app/responses/orders/_item.php */
+
+return function ($params) {
+
+	return [
+		'id' => $order->id,
+		'createdAt' => $order->created_at,
+		'userId' => $order->user_id,
+		'sum' => $order->sum,
+	];
+	
+};
 ```

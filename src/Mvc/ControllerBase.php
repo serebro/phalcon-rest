@@ -5,14 +5,12 @@ namespace PhalconRest\Mvc;
 use Phalcon\Mvc\Controller;
 
 /**
- * Class RestController
+ * Class ControllerBase
+ * @property \PhalconRest\Mvc\RestView view
  * @package PhalconRest\Mvc
  */
-abstract class RestController extends Controller
+abstract class ControllerBase extends Controller implements RestControllerInterface
 {
-
-    /** @var \PhalconRest\Mvc\RestView */
-    public $view;
 
     protected $fields = [];
 
@@ -22,24 +20,37 @@ abstract class RestController extends Controller
 
     protected $offset;
 
-    protected $method_key = '_method';
-
 
     protected function initialize()
     {
-        if ($this->request->has($this->method_key)) {
-            $method = $this->request->get($this->method_key);
-        } else {
-            $method = $this->request->getHeader('X-HTTP-Method-Override');
-        }
-
-        if (!empty($method)) {
-            $this->dispatcher->setActionName($method);
-        }
-
+        $this->view = $this->getDI()->get('restView');
         $this->fields = explode(',', $this->request->get('fields'));
         $this->sort = $this->request->get('sort');
         $this->limit = $this->request->get('limit', 'int', null);
         $this->offset = $this->request->get('offset', 'int', null);
+    }
+
+    public function optionsAction()
+    {
+    }
+
+    public function getAction()
+    {
+    }
+
+    public function putAction()
+    {
+    }
+
+    public function patchAction()
+    {
+    }
+
+    public function headAction()
+    {
+    }
+
+    public function deleteAction()
+    {
     }
 }

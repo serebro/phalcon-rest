@@ -8,7 +8,7 @@
       "homepage": "http://github.com/serebro"
     }
   ],
-  "version": "1.0",
+  "version": "0.2",
   "require": {
     "php": ">=5.4",
     "ext-phalcon": ">=1.3.2"

@@ -7,13 +7,15 @@ use Phalcon\Events\ManagerInterface;
 use Phalcon\Mvc\View;
 use PhalconRest\Mvc\View\Engine\Json as JsonEngine;
 
-class RestView extends View
+class RestView extends View implements RestViewInterface
 {
 
     /** @var  \PhalconRest\Http\Envelope */
     public $envelope;
 
     protected $data;
+
+    protected $format;
 
 
     public function partial($partialPath, array $params = null)
@@ -71,7 +73,7 @@ class RestView extends View
             }
         }
 
-        $this->_content = ob_get_contents();
+        //$this->_content = ob_get_contents();
 
         $mustClean = true;
         $silence = true;
@@ -175,25 +177,47 @@ class RestView extends View
         $viewParams = $this->_viewParams;
         $eventsManager = $this->_eventsManager;
 
-        foreach ($engines as $extension => $engine) {
-            $viewEnginePath = $viewsDirPath . $extension;
-            if (file_exists($viewEnginePath)) {
-                if (is_object($eventsManager)) {
-                    $this->_activeRenderPath = $viewEnginePath;
-                    if ($eventsManager->fire('view:beforeRenderView', $this, $viewEnginePath) === false) {
-                        continue;
+        $viewEnginePath = $viewsDirPath . '.php'; // todo
+        foreach($engines as $mime => $engine) {
+            if ($this->format === $mime) {
+                if (file_exists($viewEnginePath)) {
+                    if (is_object($eventsManager)) {
+                        $this->_activeRenderPath = $viewEnginePath;
+                        if ($eventsManager->fire('view:beforeRenderView', $this, $viewEnginePath) === false) {
+                            continue;
+                        }
                     }
-                }
 
-                $engine->render($viewEnginePath, $viewParams, $mustClean);
+                    $engine->render($viewEnginePath, $viewParams, $mustClean);
 
-                $notExists = false;
-                if (is_object($eventsManager)) {
-                    $eventsManager->fire('view:afterRenderView', $this);
+                    $notExists = false;
+                    if (is_object($eventsManager)) {
+                        $eventsManager->fire('view:afterRenderView', $this);
+                    }
+                    break;
                 }
-                break;
             }
         }
+
+        //foreach ($engines as $extension => $engine) {
+        //    $viewEnginePath = $viewsDirPath . $extension;
+        //    if (file_exists($viewEnginePath)) {
+        //        if (is_object($eventsManager)) {
+        //            $this->_activeRenderPath = $viewEnginePath;
+        //            if ($eventsManager->fire('view:beforeRenderView', $this, $viewEnginePath) === false) {
+        //                continue;
+        //            }
+        //        }
+        //
+        //        $engine->render($viewEnginePath, $viewParams, $mustClean);
+        //
+        //        $notExists = false;
+        //        if (is_object($eventsManager)) {
+        //            $eventsManager->fire('view:afterRenderView', $this);
+        //        }
+        //        break;
+        //    }
+        //}
 
         if ($notExists === true) {
             if (is_object($eventsManager)) {
@@ -225,4 +249,9 @@ class RestView extends View
         return $this;
     }
 
+    public function setFormat($mime)
+    {
+        $this->format = $mime;
+        return true;
+    }
 }

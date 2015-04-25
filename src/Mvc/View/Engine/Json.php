@@ -7,13 +7,16 @@ use Exception;
 class Json extends \Phalcon\Mvc\View\Engine\Php
 {
 
-    /** @var int */
+    /** @var int Default: JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING */
     protected $json_encode_options;
 
+    /** @var string */
     protected $callback_param_name = 'callback';
 
+    /** @var string */
     protected $json_content_type = 'application/json';
 
+    /** @var string */
     protected $jsonp_content_type = 'application/javascript';
 
 
@@ -22,6 +25,7 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
         $this->_view = $view;
         $this->setDI($dependencyInjector);
         $this->_view->envelope = new \PhalconRest\Http\Envelope\Json();
+        $this->json_encode_options = JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING;
     }
 
     /**
@@ -32,11 +36,13 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
      */
     public function render($path, $params, $mustClean = null)
     {
-        if (is_array($params)) {
-            extract($params);
+        $responser = require $path;
+        if (!is_callable($responser, true)) {
+            throw new Exception("Responser in '$path' is not callable");
         }
 
-        $data = require $path;
+        $data = $responser($params);
+
         if ($mustClean === false) {
             $this->_view->setData($data);
 
@@ -66,7 +72,7 @@ class Json extends \Phalcon\Mvc\View\Engine\Php
 			$content_type = $this->json_content_type;
         }
 
-		$response->setHeader('Content-Type', $content_type);
+        $response->setHeader('Content-Type', $content_type);
         $this->_view->setContent($content);
     }
 
