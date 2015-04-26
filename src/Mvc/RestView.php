@@ -3,7 +3,6 @@
 namespace PhalconRest\Mvc;
 
 use Exception;
-use Phalcon\Cache\BackendInterface;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Mvc\View;
 use PhalconRest\Mvc\View\Engine\Json as JsonEngine;
@@ -130,7 +129,7 @@ class RestView extends View implements RestViewInterface
         return $engines;
     }
 
-    protected function _engineRender($engines, $viewPath, $silence, $mustClean, BackendInterface $cache = null)
+    protected function _engineRender($engines, $viewPath, $silence, $mustClean, $cache = null)
     {
         $notExists = true;
         $viewsDir = $this->_viewsDir;
