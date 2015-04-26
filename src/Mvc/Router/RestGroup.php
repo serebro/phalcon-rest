@@ -9,10 +9,10 @@ class RestGroup extends Group
 {
 
     /** @var string */
-    protected $namespace = '\Controllers\Api';
+    protected $namespace = 'Controllers\Api';
 
     /** @var string */
-    protected $prefix = '/api';
+    protected $_prefix = '/api';
 
     /** @var string */
     protected $id_filter = '[0-9]+';
@@ -21,7 +21,6 @@ class RestGroup extends Group
     public function __construct($paths = null)
     {
         parent::__construct($paths);
-        $this->setName('PhalconRestDefaultRouter');
     }
 
     /**
@@ -39,25 +38,6 @@ class RestGroup extends Group
     public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPrefix()
-    {
-        return $this->prefix;
-    }
-
-    /**
-     * @param string $prefix
-     * @return $this
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
 
         return $this;
     }

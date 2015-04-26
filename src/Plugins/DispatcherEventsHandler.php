@@ -80,8 +80,10 @@ class DispatcherEventsHandler extends Plugin
                 //    'action' => 'show404'
                 //]);
 
-                return false;
+                //return false;
         }
+
+        $this->getDI()->get('response')->setContent($exception->getMessage() . ', ' . $exception->getFile() . ':' . $exception->getLine());
     }
 
     public function afterDispatch(Event $event, Dispatcher $dispatcher)

@@ -100,25 +100,25 @@ class RestView extends View implements RestViewInterface
             $engines = [];
             $registeredEngines = $this->_registeredEngines;
             if (!is_array($registeredEngines)) {
-                $engines['.php'] = new JsonEngine($this, $dependencyInjector);
+                $engines['application/json'] = new JsonEngine($this, $dependencyInjector);
             } else {
                 if (!is_object($dependencyInjector)) {
                     throw new Exception("A dependency injector container is required to obtain the application services");
                 }
 
                 $arguments = [$this, $dependencyInjector];
-                foreach ($registeredEngines as $extension => $engineService) {
+                foreach ($registeredEngines as $mime => $engineService) {
                     if (is_object($engineService)) {
                         if ($engineService instanceof \Closure) {
-                            $engines[$extension] = call_user_func_array($engineService, $arguments);
+                            $engines[$mime] = call_user_func_array($engineService, $arguments);
                         } else {
-                            $engines[$extension] = $engineService;
+                            $engines[$mime] = $engineService;
                         }
                     } else {
                         if (!is_string($engineService)) {
-                            throw new Exception("Invalid template engine registration for extension: " . $extension);
+                            throw new Exception("Invalid template engine registration for extension: " . $mime);
                         }
-                        $engines[$extension] = $dependencyInjector->getShared($engineService, $arguments);
+                        $engines[$mime] = $dependencyInjector->getShared($engineService, $arguments);
                     }
                 }
             }
