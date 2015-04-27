@@ -4,7 +4,7 @@ namespace PhalconRest\Plugins;
 
 use Phalcon\DI;
 use Phalcon\Events\Event;
-use Phalcon\Exception;
+use Exception;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\User\Plugin;
 
@@ -50,7 +50,7 @@ class DispatcherEventsHandler extends Plugin
             $mime = reset($parts);
         }
 
-        if (empty($mime)) {
+        if (empty($mime) || $mime == '*/*') {
             $mime = 'application/json';
         }
 
