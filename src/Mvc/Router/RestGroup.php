@@ -76,5 +76,7 @@ class RestGroup extends Group
         $this->addDelete('/{controller}', ['action' => 'delete', 'namespace' => $this->namespace]);
         $this->addGet('/{controller}', ['action' => 'index', 'namespace' => $this->namespace]);
         $this->addPost('/{controller}', ['action' => 'post', 'namespace' => $this->namespace]);
+
+        return $this;
     }
 }
