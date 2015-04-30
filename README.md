@@ -43,6 +43,7 @@ ExampleController.php
 namespace Controllers;
 
 class OrdersController extends \PhalconRest\Mvc\ControllerBase {
+
 	public function indexAction() {
 		$this->view->total = Order::count();
 		$this->view->orders = Order::find();
@@ -50,8 +51,13 @@ class OrdersController extends \PhalconRest\Mvc\ControllerBase {
 
 	public function getAction() {
 		$order_id = $this->dispatcher->getParam('id');
-		$this->view->order = Order::findFirst($order_id);
-		$this->view->pick('orders/item');
+		$order = Order::findFirst($order_id);
+		if (!$order) {
+			throw new \PhalconRest\Exception\NotFound();
+		}
+		
+		$this->view->order = $order;
+		$this->view->pick('orders/_item');
 	}
 }
 
@@ -75,18 +81,6 @@ return function ($params) {
 		'results' => $items
 	];
 
-};
-```
-
-```php
-<?php
-
-/* /app/responses/orders/item.php */
-
-return function ($params) {
-
-	return $this->partial('order/_item', ['order' => $order]);
-	
 };
 ```
 
