@@ -5,8 +5,13 @@ namespace PhalconRest\Plugins;
 use Phalcon\DI;
 use Phalcon\Events\Event;
 use Exception;
+use Phalcon\Events\Manager;
+use Phalcon\Events\ManagerInterface;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\User\Plugin;
+use PhalconRest\Exception\AbstractResponse;
+use PhalconRest\Mvc\RestControllerInterface;
 
 class DispatcherEventsHandler extends Plugin
 {
@@ -72,18 +77,31 @@ class DispatcherEventsHandler extends Plugin
 
     public function beforeException(Event $event, Dispatcher $dispatcher, Exception $exception)
     {
+        $di = $this->getDI();
+        $response = $di->get('response');
+
         switch ($exception->getCode()) {
             case Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
             case Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
-                //$dispatcher->forward([
-                //    'controller' => 'error',
-                //    'action' => 'show404'
-                //]);
+                $dispatcher->forward([
+                    'controller' => 'error',
+                    'action' => 'show404'
+                ]);
 
-                //return false;
+                return false;
         }
 
-        $this->getDI()->get('response')->setContent($exception->getMessage() . ', ' . $exception->getFile() . ':' . $exception->getLine());
+        if ($exception instanceof AbstractResponse) {
+            $response
+                ->setContent($exception->getMessage())
+                ->setStatusCode($exception->getStatusCode(), $exception->getStatusMessage());
+
+            $dispatcher->setReturnedValue($response);
+
+            return false;
+        }
+
+        return $response->setContent($exception->getMessage() . ', ' . $exception->getFile() . ':' . $exception->getLine());
     }
 
     public function afterDispatch(Event $event, Dispatcher $dispatcher)
@@ -92,6 +110,34 @@ class DispatcherEventsHandler extends Plugin
 
     public function afterDispatchLoop(Event $event, Dispatcher $dispatcher)
     {
+        $di = $this->getDI();
+        $response = $di->get('response');
+        $content = $response->getContent();
+
+        if ($content === '' && $dispatcher->getActiveController() instanceof RestControllerInterface) {
+            $returnedResponse = $dispatcher->getReturnedValue() instanceof ResponseInterface;
+            if ($returnedResponse === false) {
+                /** @var \PhalconRest\Mvc\RestView $view */
+                $view = $di->get('restView');
+
+                /** @var Manager $eventsManager */
+                $eventsManager = $this->_eventsManager; //$eventsManager = $dispatcher->getDI()->get('eventsManager');
+
+                $renderStatus = true;
+                if ($eventsManager instanceof ManagerInterface) {
+                    $renderStatus = $eventsManager->fire('application:viewRender', $this, $view);
+                }
+
+                if ($renderStatus) {
+                    $view->render($dispatcher->getControllerName(), $dispatcher->getActionName());
+                    $content = $view->getContent();
+                }
+
+                /** @var \Phalcon\Http\Response $response */
+                $response = $di->get('response');
+                $response->setContent($content)->send();
+            }
+        }
     }
 
     /**
