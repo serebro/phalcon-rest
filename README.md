@@ -4,17 +4,11 @@ Phalcon Rest
 
 ### Configuration
 
-View Engine
+Services (config/services.php)
 ```php
- 
-new \PhalconRest\ServiceProvider($di);
+$di = new \Phalcon\DI\FactoryDefault();
 
-$di->set('view', function() use($di) {
-    /** @var \PhalconRest\Mvc\RestView $restView */
-    $restView = $di->get('restView');
-    $restView->setBasePath('/app/responses/');
-    return $restView;
-});
+new \PhalconRest\ServiceProvider($di);
 ```
 
 Router (config/routes.php)
@@ -40,10 +34,14 @@ ExampleController.php
 ```php
 <?php
 
-namespace Controllers;
+namespace Controllers\Api;
 
 class OrdersController extends \PhalconRest\Mvc\ControllerBase {
 
+	public function initialize() {
+		$this->rest->setViewsDir('api/');
+	}
+	
 	public function indexAction() {
 		$this->view->total = Order::count();
 		$this->view->orders = Order::find();
@@ -56,19 +54,18 @@ class OrdersController extends \PhalconRest\Mvc\ControllerBase {
 			throw new \PhalconRest\Exception\NotFound();
 		}
 		
-		$this->view->order = $order;
-		$this->view->pick('orders/_item');
+		$this->rest->order = $order;
+		$this->rest->pick('orders/_item');
 	}
 }
 
 ```
 
-### Response Views
+### Response
 
 ```php
 <?php
-
-/* /app/responses/orders/index.php */
+/* app/rest/orders/index.php */
 
 return function ($params) {
 
@@ -86,7 +83,7 @@ return function ($params) {
 
 ```php
 <?php
-/* /app/responses/orders/_item.php */
+/* app/rest/orders/_item.php */
 
 return function ($params) {
 

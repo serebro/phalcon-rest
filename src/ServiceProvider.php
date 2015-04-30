@@ -25,15 +25,16 @@ class ServiceProvider extends Injectable implements EventsAwareInterface, Inject
         $dispatcher->setEventsManager($eventsManager);
 
 
-        $di->set('restView', function() use($di) {
-            $view = new \PhalconRest\Mvc\RestView();
-            $view->registerEngines([
-                'application/json' => new \PhalconRest\Mvc\View\Engine\Json($view, $di),
-                //'application/xml' =>  new \PhalconRest\Mvc\View\Engine\Xml($view, $di),
-                //'text/html' =>  new \PhalconRest\Mvc\View\Engine\Php($view, $di),
+        $di->set('rest', function() use($di) {
+            $rest = new \PhalconRest\Mvc\RestView();
+            $rest->setBasePath('../app/rest/');
+            $rest->registerEngines([
+                'application/json' => new \PhalconRest\Mvc\Rest\Engine\Json($rest, $di),
+                //'application/xml' =>  new \PhalconRest\Mvc\Rest\Engine\Xml($rest, $di),
+                //'text/html' =>  new \PhalconRest\Mvc\View\Engine\Php($rest, $di),
             ]);
 
-            return $view;
+            return $rest;
         }, true);
 
     }

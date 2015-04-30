@@ -12,6 +12,9 @@ use Phalcon\Mvc\Controller;
 abstract class ControllerBase extends Controller implements RestControllerInterface
 {
 
+    /** @var RestView */
+    protected $rest;
+
     /** @var array */
     protected $fields = [];
 
@@ -27,11 +30,13 @@ abstract class ControllerBase extends Controller implements RestControllerInterf
 
     protected function initialize()
     {
-        $this->view = $this->getDI()->get('restView');
-        $this->fields = explode(',', $this->request->get('fields'));
-        $this->sort = $this->request->get('sort');
+        $fields = $this->request->get('fields', null, null);
+        $this->fields = $fields ? explode(',', $fields) : [];
+        $this->sort = $this->request->get('sort', null, '');
         $this->limit = $this->request->get('limit', 'int', 50);
         $this->offset = $this->request->get('offset', 'int', 0);
+
+        $this->rest = $this->getDI()->get('rest');
     }
 
     public function optionsAction()

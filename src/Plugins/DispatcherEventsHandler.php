@@ -59,8 +59,8 @@ class DispatcherEventsHandler extends Plugin
             $mime = 'application/json';
         }
 
-        $restView = $di->get('restView');
-        $restView->setFormat($mime);
+        $rest = $di->get('rest');
+        $rest->setFormat($mime);
     }
 
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
@@ -101,7 +101,7 @@ class DispatcherEventsHandler extends Plugin
             return false;
         }
 
-        return $response->setContent($exception->getMessage() . ', ' . $exception->getFile() . ':' . $exception->getLine());
+        //return $response->setContent($exception->getMessage() . ', ' . $exception->getFile() . ':' . $exception->getLine());
     }
 
     public function afterDispatch(Event $event, Dispatcher $dispatcher)
@@ -117,20 +117,20 @@ class DispatcherEventsHandler extends Plugin
         if ($content === '' && $dispatcher->getActiveController() instanceof RestControllerInterface) {
             $returnedResponse = $dispatcher->getReturnedValue() instanceof ResponseInterface;
             if ($returnedResponse === false) {
-                /** @var \PhalconRest\Mvc\RestView $view */
-                $view = $di->get('restView');
+                /** @var \PhalconRest\Mvc\RestView $rest */
+                $rest = $di->get('rest');
 
                 /** @var Manager $eventsManager */
                 $eventsManager = $this->_eventsManager; //$eventsManager = $dispatcher->getDI()->get('eventsManager');
 
                 $renderStatus = true;
                 if ($eventsManager instanceof ManagerInterface) {
-                    $renderStatus = $eventsManager->fire('application:viewRender', $this, $view);
+                    $renderStatus = $eventsManager->fire('application:viewRender', $this, $rest);
                 }
 
                 if ($renderStatus) {
-                    $view->render($dispatcher->getControllerName(), $dispatcher->getActionName());
-                    $content = $view->getContent();
+                    $rest->render($dispatcher->getControllerName(), $dispatcher->getActionName());
+                    $content = $rest->getContent();
                 }
 
                 /** @var \Phalcon\Http\Response $response */

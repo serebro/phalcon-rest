@@ -1,11 +1,12 @@
 <?php
 
-namespace PhalconRest\Mvc\View\Engine;
+namespace PhalconRest\Mvc\Rest\Engine;
 
 use Exception;
 use Phalcon\DiInterface;
+use Phalcon\Mvc\View\Engine\Php;
 
-class Json extends \Phalcon\Mvc\View\Engine\Php
+class Json extends Php
 {
 
     /** @var int Default: JSON_UNESCAPED_UNICODE | JSON_BIGINT_AS_STRING */
