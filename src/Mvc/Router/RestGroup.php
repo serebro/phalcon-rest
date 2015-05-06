@@ -64,15 +64,15 @@ class RestGroup extends Group
     public function initDefault()
     {
         $id_filter = $this->id_filter ? ':' . $this->id_filter : '';
+        $this->add('/{controller}/{action}', ['namespace' => $this->namespace]);
+        $this->add('/{controller}/{id' . $id_filter . '}/{action}', ['namespace' => $this->namespace]);
         $this->addOptions('/{controller}', ['action' => 'options', 'namespace' => $this->namespace]);
         $this->addOptions('/{controller}/{id' . $id_filter . '}', ['action' => 'options', 'namespace' => $this->namespace]);
-        $this->add('/{controller}/{action}', ['namespace' => $this->namespace]);
         $this->addGet('/{controller}/{id' . $id_filter . '}', ['action' => 'get', 'namespace' => $this->namespace]);
         $this->addPut('/{controller}/{id' . $id_filter . '}', ['action' => 'put', 'namespace' => $this->namespace]);
         $this->addPatch('/{controller}/{id' . $id_filter . '}', ['action' => 'patch', 'namespace' => $this->namespace]);
         $this->addHead('/{controller}/{id' . $id_filter . '}', ['action' => 'head', 'namespace' => $this->namespace]);
         $this->addDelete('/{controller}/{id' . $id_filter . '}', ['action' => 'delete', 'namespace' => $this->namespace]);
-        $this->add('/{controller}/{id' . $id_filter . '}/{action}', ['namespace' => $this->namespace]);
         $this->addDelete('/{controller}', ['action' => 'delete', 'namespace' => $this->namespace]);
         $this->addGet('/{controller}', ['action' => 'index', 'namespace' => $this->namespace]);
         $this->addPost('/{controller}', ['action' => 'post', 'namespace' => $this->namespace]);
