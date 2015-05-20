@@ -5,6 +5,7 @@ namespace PhalconRest\Mvc\Rest\Engine;
 use Exception;
 use Phalcon\DiInterface;
 use Phalcon\Mvc\View\Engine\Php;
+use Phalcon\Mvc\ViewInterface;
 
 class Json extends Php
 {
@@ -22,7 +23,7 @@ class Json extends Php
     protected $jsonp_content_type = 'application/javascript';
 
 
-    public function __construct($view, DiInterface $dependencyInjector = null)
+    public function __construct(ViewInterface $view, DiInterface $dependencyInjector = null)
     {
         $this->_view = $view;
         $this->setDI($dependencyInjector);
