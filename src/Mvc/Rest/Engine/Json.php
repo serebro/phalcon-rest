@@ -23,7 +23,7 @@ class Json extends Php
     protected $jsonp_content_type = 'application/javascript';
 
 
-    public function __construct(ViewInterface $view, DiInterface $dependencyInjector = null)
+    public function __construct($view, DiInterface $dependencyInjector = null)
     {
         $this->_view = $view;
         $this->setDI($dependencyInjector);
